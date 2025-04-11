@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface SudokuBoardProps {
   grid: number[][];
@@ -9,8 +9,32 @@ interface SudokuBoardProps {
 
 const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzzle }) => {
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
-  const [errors, setErrors] = useState<Set<string>>(new Set());
   const [showWinMessage, setShowWinMessage] = useState(false);
+
+  const validateCell = useCallback((row: number, col: number, value: number): boolean => {
+    if (value === 0) return true;
+    
+    // Check row
+    for (let c = 0; c < 9; c++) {
+      if (c !== col && grid[row][c] === value) return false;
+    }
+    
+    // Check column
+    for (let r = 0; r < 9; r++) {
+      if (r !== row && grid[r][col] === value) return false;
+    }
+    
+    // Check 3x3 box
+    const boxRow = Math.floor(row / 3) * 3;
+    const boxCol = Math.floor(col / 3) * 3;
+    for (let r = boxRow; r < boxRow + 3; r++) {
+      for (let c = boxCol; c < boxCol + 3; c++) {
+        if (r !== row && c !== col && grid[r][c] === value) return false;
+      }
+    }
+    
+    return true;
+  }, [grid]);
 
   // Check if the board is full and valid
   useEffect(() => {
@@ -24,7 +48,7 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
     } else {
       setShowWinMessage(false);
     }
-  }, [grid]);
+  }, [grid, validateCell]);
 
   const handleCellClick = (row: number, col: number) => {
     setSelectedCell([row, col]);
@@ -55,31 +79,6 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
     }
     
     onCellChange(row, col, newValue);
-  };
-
-  const validateCell = (row: number, col: number, value: number): boolean => {
-    if (value === 0) return true;
-    
-    // Check row
-    for (let c = 0; c < 9; c++) {
-      if (c !== col && grid[row][c] === value) return false;
-    }
-    
-    // Check column
-    for (let r = 0; r < 9; r++) {
-      if (r !== row && grid[r][col] === value) return false;
-    }
-    
-    // Check 3x3 box
-    const boxRow = Math.floor(row / 3) * 3;
-    const boxCol = Math.floor(col / 3) * 3;
-    for (let r = boxRow; r < boxRow + 3; r++) {
-      for (let c = boxCol; c < boxCol + 3; c++) {
-        if (r !== row && c !== col && grid[r][c] === value) return false;
-      }
-    }
-    
-    return true;
   };
 
   const handleNumberButtonClick = (value: number) => {
@@ -145,11 +144,11 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
             className={`
               w-10 h-10 flex items-center justify-center
               rounded-full text-lg font-medium
-              ${num === 0 ? 'bg-gray-200 hover:bg-gray-300' : 'bg-blue-100 hover:bg-blue-200'}
+              ${num === 0 ? "bg-gray-200 hover:bg-gray-300" : "bg-blue-100 hover:bg-blue-200"}
               transition-colors
             `}
           >
-            {num === 0 ? '⌫' : num}
+            {num === 0 ? "⌫" : num}
           </button>
         ))}
       </div>

@@ -1,12 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import SudokuBoard from './components/SudokuBoard';
 
 export default function Home() {
   const [grid, setGrid] = useState<number[][]>([]);
 
   // Check if a number can be placed in a cell without conflicts
-  const isValidPlacement = (grid: number[][], row: number, col: number, num: number): boolean => {
+  const isValidPlacement = useCallback((grid: number[][], row: number, col: number, num: number): boolean => {
     // Check row
     for (let c = 0; c < 9; c++) {
       if (grid[row][c] === num) return false;
@@ -27,10 +27,10 @@ export default function Home() {
     }
     
     return true;
-  };
+  }, []);
 
   // Try to solve the grid using backtracking
-  const solveGrid = (grid: number[][]): boolean => {
+  const solveGrid = useCallback((grid: number[][]): boolean => {
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
         if (grid[row][col] === 0) {
@@ -48,9 +48,9 @@ export default function Home() {
       }
     }
     return true;
-  };
+  }, [isValidPlacement]);
 
-  const initializeGrid = () => {
+  const initializeGrid = useCallback(() => {
     // Start with an empty grid
     const newGrid = Array(9).fill(null).map(() => Array(9).fill(0));
     
@@ -86,7 +86,7 @@ export default function Home() {
     }
     
     setGrid(puzzleGrid);
-  };
+  }, [solveGrid]);
 
   // Fill a 3x3 box with random numbers
   const fillBox = (grid: number[][], startRow: number, startCol: number) => {
@@ -108,7 +108,7 @@ export default function Home() {
 
   useEffect(() => {
     initializeGrid();
-  }, []);
+  }, [initializeGrid]);
 
   const handleCellChange = (row: number, col: number, value: number) => {
     const newGrid = [...grid];
