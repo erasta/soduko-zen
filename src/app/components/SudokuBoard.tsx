@@ -9,7 +9,7 @@ interface SudokuBoardProps {
 }
 
 const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzzle }) => {
-  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
+  const { selectedCell, setSelectedCell } = useSudokuStore();
   const [showWinMessage, setShowWinMessage] = useState(false);
   const cellRefs = useRef<(HTMLDivElement | null)[][]>(Array(9).fill(null).map(() => Array(9).fill(null)));
 
@@ -134,7 +134,7 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
       setSelectedCell([0, 0]);
       cellRefs.current[0][0]?.focus();
     }
-  }, [grid, selectedCell]);
+  }, [grid, selectedCell, setSelectedCell]);
 
   return (
     <div className="flex flex-col items-center p-4">

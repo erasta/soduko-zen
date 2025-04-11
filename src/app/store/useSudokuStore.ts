@@ -2,8 +2,11 @@ import { create } from 'zustand';
 
 interface SudokuState {
   grid: number[][];
+  selectedCell: [number, number] | null;
   setGrid: (grid: number[][]) => void;
   handleCellChange: (row: number, col: number, value: number) => void;
+  setSelectedCell: (cell: [number, number] | null) => void;
+  moveSelectedCell: (direction: 'up' | 'down' | 'left' | 'right') => void;
   initializeGrid: () => void;
 }
 
@@ -70,12 +73,39 @@ const fillBox = (grid: number[][], startRow: number, startCol: number) => {
 
 export const useSudokuStore = create<SudokuState>((set) => ({
   grid: [],
+  selectedCell: null,
   setGrid: (grid) => set({ grid }),
   handleCellChange: (row, col, value) => 
     set((state) => {
       const newGrid = state.grid.map(row => [...row]);
       newGrid[row][col] = value;
       return { grid: newGrid };
+    }),
+  setSelectedCell: (cell) => set({ selectedCell: cell }),
+  moveSelectedCell: (direction) => 
+    set((state) => {
+      if (!state.selectedCell) return state;
+      
+      const [row, col] = state.selectedCell;
+      let newRow = row;
+      let newCol = col;
+      
+      switch (direction) {
+        case 'up':
+          newRow = row > 0 ? row - 1 : 8;
+          break;
+        case 'down':
+          newRow = row < 8 ? row + 1 : 0;
+          break;
+        case 'left':
+          newCol = col > 0 ? col - 1 : 8;
+          break;
+        case 'right':
+          newCol = col < 8 ? col + 1 : 0;
+          break;
+      }
+      
+      return { selectedCell: [newRow, newCol] as [number, number] };
     }),
   initializeGrid: () => {
     // Start with an empty grid
