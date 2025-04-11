@@ -137,24 +137,24 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
   }, [grid, selectedCell, setSelectedCell]);
 
   return (
-    <div className="flex flex-col items-center p-4">
+    <div className="flex flex-col items-center p-2 sm:p-4">
       <div className="flex justify-between w-full max-w-[450px] mb-4">
-        <h1 className="text-2xl font-bold">Sudoku</h1>
+        <h1 className="text-xl sm:text-2xl font-bold">Sudoku</h1>
         <button
           onClick={onNewPuzzle}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          className="px-3 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm sm:text-base"
         >
           New Puzzle
         </button>
       </div>
       
       {showWinMessage && (
-        <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-lg font-bold">
+        <div className="mb-4 p-3 sm:p-4 bg-green-100 text-green-800 rounded-lg font-bold text-sm sm:text-base">
           Congratulations! You&apos;ve solved the puzzle!
         </div>
       )}
       
-      <div className="grid grid-cols-9 gap-[1px] bg-gray-300 p-[1px]">
+      <div className="grid grid-cols-9 gap-[1px] bg-gray-300 p-[1px] w-full max-w-[450px]">
         {grid.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const isSelected = selectedCell?.[0] === rowIndex && selectedCell?.[1] === colIndex;
@@ -170,8 +170,8 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
                 onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
                 onWheel={(e) => handleWheel(e, rowIndex, colIndex)}
                 className={`
-                  w-12 h-12 flex items-center justify-center
-                  bg-white text-xl font-medium cursor-pointer
+                  aspect-square w-full max-w-[48px] flex items-center justify-center
+                  bg-white text-base sm:text-xl font-medium cursor-pointer
                   ${colIndex % 3 === 2 && colIndex !== 8 ? 'border-r-2 border-r-gray-400' : ''}
                   ${rowIndex % 3 === 2 && rowIndex !== 8 ? 'border-b-2 border-b-gray-400' : ''}
                   ${isSelected ? 'bg-blue-100' : ''}
@@ -186,14 +186,14 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
         )}
       </div>
       
-      <div className="mt-6 flex flex-wrap justify-center gap-2 max-w-[450px]">
+      <div className="mt-4 sm:mt-6 flex flex-wrap justify-center gap-1 sm:gap-2 max-w-[450px]">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
           <button
             key={num}
             onClick={() => handleNumberButtonClick(num)}
             className={`
-              w-10 h-10 flex items-center justify-center
-              rounded-full text-lg font-medium
+              w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center
+              rounded-full text-base sm:text-lg font-medium
               ${num === 0 ? "bg-gray-200 hover:bg-gray-300" : "bg-blue-100 hover:bg-blue-200"}
               transition-colors
             `}
