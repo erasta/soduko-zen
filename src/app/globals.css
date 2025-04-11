@@ -3,6 +3,28 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --cell-bg: #ffffff;
+  --cell-border: #d1d5db;
+  --cell-border-dark: #4b5563;
+  --cell-selected: #dbeafe;
+  --cell-selected-dark: #1e3a8a;
+  --button-bg: #3b82f6;
+  --button-hover: #2563eb;
+  --button-text: #ffffff;
+  --number-button-bg: #dbeafe;
+  --number-button-hover: #bfdbfe;
+  --number-button-bg-alt: #e5e7eb;
+  --number-button-hover-alt: #d1d5db;
+  --number-button-bg-alt-dark: #374151;
+  --number-button-hover-alt-dark: #4b5563;
+  --grid-bg: #d1d5db;
+  --grid-bg-dark: #4b5563;
+  --invalid-text: #ef4444;
+  --invalid-text-dark: #f87171;
+  --win-message-bg: #dcfce7;
+  --win-message-text: #166534;
+  --win-message-bg-dark: #064e3b;
+  --win-message-text-dark: #a7f3d0;
 }
 
 @theme inline {
@@ -16,6 +38,23 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --cell-bg: #171717;
+    --cell-border: #4b5563;
+    --cell-border-dark: #6b7280;
+    --cell-selected: #1e3a8a;
+    --cell-selected-dark: #3b82f6;
+    --button-bg: #3b82f6;
+    --button-hover: #2563eb;
+    --button-text: #ffffff;
+    --number-button-bg: #1e3a8a;
+    --number-button-hover: #3b82f6;
+    --number-button-bg-alt: #374151;
+    --number-button-hover-alt: #4b5563;
+    --grid-bg: #4b5563;
+    --grid-bg-dark: #6b7280;
+    --invalid-text: #f87171;
+    --win-message-bg: #064e3b;
+    --win-message-text: #a7f3d0;
   }
 }
 

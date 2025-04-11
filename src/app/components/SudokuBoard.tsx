@@ -142,19 +142,19 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
         <h1 className="text-xl sm:text-2xl font-bold">Sudoku</h1>
         <button
           onClick={onNewPuzzle}
-          className="px-3 py-1 sm:px-4 sm:py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm sm:text-base"
+          className="px-3 py-1 sm:px-4 sm:py-2 bg-[var(--button-bg)] text-[var(--button-text)] rounded hover:bg-[var(--button-hover)] transition-colors text-sm sm:text-base"
         >
           New Puzzle
         </button>
       </div>
       
       {showWinMessage && (
-        <div className="mb-4 p-3 sm:p-4 bg-green-100 text-green-800 rounded-lg font-bold text-sm sm:text-base">
+        <div className="mb-4 p-3 sm:p-4 bg-[var(--win-message-bg)] text-[var(--win-message-text)] rounded-lg font-bold text-sm sm:text-base">
           Congratulations! You&apos;ve solved the puzzle!
         </div>
       )}
       
-      <div className="grid grid-cols-9 gap-[1px] bg-gray-300 p-[1px] w-full max-w-[450px]">
+      <div className="grid grid-cols-9 gap-[1px] bg-[var(--grid-bg)] p-[1px] w-full max-w-[450px]">
         {grid.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const isSelected = selectedCell?.[0] === rowIndex && selectedCell?.[1] === colIndex;
@@ -171,12 +171,12 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
                 onWheel={(e) => handleWheel(e, rowIndex, colIndex)}
                 className={`
                   aspect-square w-full max-w-[48px] flex items-center justify-center
-                  bg-white text-base sm:text-xl font-medium cursor-pointer
-                  ${colIndex % 3 === 2 && colIndex !== 8 ? 'border-r-2 border-r-gray-400' : ''}
-                  ${rowIndex % 3 === 2 && rowIndex !== 8 ? 'border-b-2 border-b-gray-400' : ''}
-                  ${isSelected ? 'bg-blue-100' : ''}
-                  ${!isValid ? 'text-red-500' : ''}
-                  focus:outline-none focus:ring-2 focus:ring-blue-500
+                  bg-[var(--cell-bg)] text-base sm:text-xl font-medium cursor-pointer
+                  ${colIndex % 3 === 2 && colIndex !== 8 ? 'border-r-2 border-r-[var(--cell-border-dark)]' : ''}
+                  ${rowIndex % 3 === 2 && rowIndex !== 8 ? 'border-b-2 border-b-[var(--cell-border-dark)]' : ''}
+                  ${isSelected ? 'bg-[var(--cell-selected)]' : ''}
+                  ${!isValid ? 'text-[var(--invalid-text)]' : ''}
+                  focus:outline-none focus:ring-2 focus:ring-[var(--button-bg)]
                 `}
               >
                 {cell !== 0 ? cell : ''}
@@ -194,7 +194,9 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
             className={`
               w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center
               rounded-full text-base sm:text-lg font-medium
-              ${num === 0 ? "bg-gray-200 hover:bg-gray-300" : "bg-blue-100 hover:bg-blue-200"}
+              ${num === 0 
+                ? "bg-[var(--number-button-bg-alt)] hover:bg-[var(--number-button-hover-alt)]" 
+                : "bg-[var(--number-button-bg)] hover:bg-[var(--number-button-hover)]"}
               transition-colors
             `}
           >
