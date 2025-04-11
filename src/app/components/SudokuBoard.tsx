@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSudokuStore } from '../store/useSudokuStore';
 
 interface SudokuBoardProps {
   grid: number[][];
@@ -101,7 +102,7 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
       
       {showWinMessage && (
         <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-lg font-bold">
-          Congratulations! You've solved the puzzle!
+          Congratulations! You&apos;ve solved the puzzle!
         </div>
       )}
       
