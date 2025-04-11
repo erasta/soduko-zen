@@ -25,9 +25,8 @@
   --win-message-text: #166534;
   --win-message-bg-dark: #064e3b;
   --win-message-text-dark: #a7f3d0;
-}
-
-@theme inline {
+  
+  /* Theme variables */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
