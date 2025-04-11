@@ -81,7 +81,7 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
     
     setSelectedCell([newRow, newCol]);
     cellRefs.current[newRow][newCol]?.focus();
-  }, [selectedCell]);
+  }, [selectedCell, setSelectedCell]);
 
   const handleKeyDown = (e: React.KeyboardEvent, row: number, col: number) => {
     if (e.key >= '1' && e.key <= '9') {
