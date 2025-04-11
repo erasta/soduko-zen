@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSudokuStore } from '../store/useSudokuStore';
 
 interface SudokuBoardProps {
@@ -11,6 +11,7 @@ interface SudokuBoardProps {
 const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzzle }) => {
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
   const [showWinMessage, setShowWinMessage] = useState(false);
+  const cellRefs = useRef<(HTMLDivElement | null)[][]>(Array(9).fill(null).map(() => Array(9).fill(null)));
 
   const validateCell = useCallback((row: number, col: number, value: number): boolean => {
     if (value === 0) return true;
@@ -53,7 +54,34 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
 
   const handleCellClick = (row: number, col: number) => {
     setSelectedCell([row, col]);
+    cellRefs.current[row][col]?.focus();
   };
+
+  const moveSelectedCell = useCallback((direction: 'up' | 'down' | 'left' | 'right') => {
+    if (!selectedCell) return;
+    
+    const [row, col] = selectedCell;
+    let newRow = row;
+    let newCol = col;
+    
+    switch (direction) {
+      case 'up':
+        newRow = row > 0 ? row - 1 : 8;
+        break;
+      case 'down':
+        newRow = row < 8 ? row + 1 : 0;
+        break;
+      case 'left':
+        newCol = col > 0 ? col - 1 : 8;
+        break;
+      case 'right':
+        newCol = col < 8 ? col + 1 : 0;
+        break;
+    }
+    
+    setSelectedCell([newRow, newCol]);
+    cellRefs.current[newRow][newCol]?.focus();
+  }, [selectedCell]);
 
   const handleKeyDown = (e: React.KeyboardEvent, row: number, col: number) => {
     if (e.key >= '1' && e.key <= '9') {
@@ -61,6 +89,18 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
       onCellChange(row, col, value);
     } else if (e.key === 'Backspace' || e.key === 'Delete') {
       onCellChange(row, col, 0);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      moveSelectedCell('up');
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      moveSelectedCell('down');
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      moveSelectedCell('left');
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      moveSelectedCell('right');
     }
   };
 
@@ -87,6 +127,14 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
       onCellChange(selectedCell[0], selectedCell[1], value);
     }
   };
+
+  // Initialize the first cell as selected when the component mounts
+  useEffect(() => {
+    if (grid.length > 0 && !selectedCell) {
+      setSelectedCell([0, 0]);
+      cellRefs.current[0][0]?.focus();
+    }
+  }, [grid, selectedCell]);
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -116,6 +164,7 @@ const SudokuBoard: React.FC<SudokuBoardProps> = ({ grid, onCellChange, onNewPuzz
             return (
               <div
                 key={cellKey}
+                ref={el => { cellRefs.current[rowIndex][colIndex] = el; }}
                 tabIndex={0}
                 onClick={() => handleCellClick(rowIndex, colIndex)}
                 onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
